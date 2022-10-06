@@ -37,4 +37,30 @@ public class JwtProvider {
                 .signWith(getSecretKey(), SignatureAlgorithm.HS512) // 암호화 알고리즘 방식
                 .compact();
     }
+
+    /* accessToken 유효화 인증 */
+    public boolean verify(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(getSecretKey())
+                    .build()
+                    .parseClaimsJws(token);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /* accessToken의 claims(토큰에 담는 payload, 즉 데이터) -> map으로 */
+    public Map<String, Object> getClaims(String token) {
+        String body = Jwts.parserBuilder()
+                .setSigningKey(getSecretKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("body", String.class);
+
+        return Utility.json.toMap(body);
+    }
 }
