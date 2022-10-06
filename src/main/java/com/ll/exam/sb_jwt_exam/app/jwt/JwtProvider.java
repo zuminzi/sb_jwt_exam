@@ -9,11 +9,19 @@ import java.util.Base64;
 
 @Component
 public class JwtProvider {
+    private SecretKey cachedSecretKey;
+
     @Value("${custom.jwt.secretKey}")
     private String secretKeyPlain;
 
-    public SecretKey getSecretKey() {
+    private SecretKey _getSecretKey() { // 내부 계산용
         String keyBase64Encoded = Base64.getEncoder().encodeToString(secretKeyPlain.getBytes());
         return Keys.hmacShaKeyFor(keyBase64Encoded.getBytes());
+    }
+
+    public SecretKey getSecretKey() { // 외부 서비스용
+        if (cachedSecretKey == null) cachedSecretKey = _getSecretKey();
+
+        return cachedSecretKey;
     }
 }
