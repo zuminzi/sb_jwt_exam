@@ -1,3 +1,11 @@
 custom:
   jwt:
     secretKey: secretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKey
+spring:
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+logging:
+  level:
+    com.ll.exam.com.ll.exam.sb_jwt_exam.app: debug
