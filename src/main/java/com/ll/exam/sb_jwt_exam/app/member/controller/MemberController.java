@@ -18,6 +18,10 @@ public class MemberController {
     // JSON 객체 받는 클래스 따로 생성 필요
     // Member 클래스의 username, password로 바로 받으면 제대로 안받아와짐
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+        if (loginDto.isNotValid()) {
+            return new ResponseEntity<>(null, null, HttpStatus.BAD_REQUEST);
+        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authentication", "JWT키");
 
@@ -30,5 +34,9 @@ public class MemberController {
     public static class LoginDto {
         private String username;
         private String password;
+
+        public boolean isNotValid() {
+            return username == null || password == null || username.trim().length() == 0 || password.trim().length() == 0;
+        }
     }
 }
