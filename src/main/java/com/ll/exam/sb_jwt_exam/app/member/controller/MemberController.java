@@ -2,6 +2,7 @@ package com.ll.exam.sb_jwt_exam.app.member.controller;
 
 import com.ll.exam.sb_jwt_exam.app.member.entity.Member;
 import com.ll.exam.sb_jwt_exam.app.member.service.MemberService;
+import com.ll.exam.sb_jwt_exam.util.Utility;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -42,12 +43,10 @@ public class MemberController {
 
         // Authentication 헤더 추가
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authentication", "JWT키");
+        headers.set("Authentication", "JWT_Access_Token");
 
-        String body = "username : %s, password : %s".formatted(loginDto.getUsername(), loginDto.getPassword());
-
-        // 한 큐에 바디, 헤더, 상태코드 조절 가능
-        return new ResponseEntity<>(body, headers, HttpStatus.OK);
+        // response body 보여주지 않고 null 처리
+        return Utility.spring.responseEntityOf(headers);
     }
 
     @Data

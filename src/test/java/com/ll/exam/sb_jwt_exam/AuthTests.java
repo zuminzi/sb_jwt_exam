@@ -128,7 +128,7 @@ class AuthTests {
                 .andExpect(status().is4xxClientError());
     }
     @Test
-    @DisplayName("POST /member/login 호출할 때 올바르지 않는 username 이나 password 를 입력하면 400")
+    @DisplayName("POST /member/login 호출할 때 올바르지 않은 username 이나 password 를 입력하면 400")
     void t4() throws Exception {
         // When
         ResultActions resultActions = mvc

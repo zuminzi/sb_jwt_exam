@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.exam.sb_jwt_exam.app.jwt.AppConfig;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -39,6 +42,14 @@ public class Utility {
             } catch (JsonProcessingException e) {
                 return null;
             }
+        }
+    }
+
+    public static class spring {
+
+        /* response body null 처리 */
+        public static <T> ResponseEntity<T> responseEntityOf(HttpHeaders headers) {
+            return new ResponseEntity<>(null, headers, HttpStatus.OK);
         }
     }
 }
