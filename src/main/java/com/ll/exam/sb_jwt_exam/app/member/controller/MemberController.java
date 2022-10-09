@@ -1,5 +1,6 @@
 package com.ll.exam.sb_jwt_exam.app.member.controller;
 
+import com.ll.exam.sb_jwt_exam.app.base.RsData;
 import com.ll.exam.sb_jwt_exam.app.member.entity.Member;
 import com.ll.exam.sb_jwt_exam.app.member.service.MemberService;
 import com.ll.exam.sb_jwt_exam.util.Utility;
@@ -24,21 +25,21 @@ public class MemberController {
     @PostMapping("/login")
     // JSON 객체 받는 클래스 따로 생성 필요
     // Member 클래스의 username, password로 바로 받으면 제대로 안받아와짐
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<RsData> login(@RequestBody LoginDto loginDto) {
         // null 체크
         if (loginDto.isNotValid()) {
-            return new ResponseEntity<>(null, null, HttpStatus.BAD_REQUEST);
+            return Utility.spring.responseEntityOf(RsData.of("F-1", "로그인 정보가 올바르지 않습니다."));
         }
 
         // 올바른 username과 password인지 체크
         Member member = memberService.findByUsername(loginDto.getUsername()).orElse(null);
 
         if (member == null) {
-            return new ResponseEntity<>(null, null, HttpStatus.BAD_REQUEST);
+            return Utility.spring.responseEntityOf(RsData.of("F-2", "일치하는 회원이 존재하지 않습니다."));
         }
 
         if (passwordEncoder.matches(loginDto.getPassword(), member.getPassword()) == false) {
-            return new ResponseEntity<>(null, null, HttpStatus.BAD_REQUEST);
+            return Utility.spring.responseEntityOf(RsData.of("F-3", "비밀번호가 일치하지 않습니다."));
         }
 
         // Authentication 헤더 추가
@@ -46,7 +47,7 @@ public class MemberController {
         headers.set("Authentication", "JWT_Access_Token");
 
         // response body 보여주지 않고 null 처리
-        return Utility.spring.responseEntityOf(headers);
+        return Utility.spring.responseEntityOf(RsData.of("S-1", "로그인 성공, Access Token을 발급합니다."), headers);
     }
 
     @Data

@@ -2,6 +2,7 @@ package com.ll.exam.sb_jwt_exam.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ll.exam.sb_jwt_exam.app.base.RsData;
 import com.ll.exam.sb_jwt_exam.app.jwt.AppConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -48,8 +49,12 @@ public class Utility {
     public static class spring {
 
         /* response body null 처리 */
-        public static <T> ResponseEntity<T> responseEntityOf(HttpHeaders headers) {
-            return new ResponseEntity<>(null, headers, HttpStatus.OK);
+        public static <T> ResponseEntity<RsData> responseEntityOf(RsData<T> rsData) {
+            return responseEntityOf(rsData, null);
+        }
+
+        public static <T> ResponseEntity<RsData> responseEntityOf(RsData<T> rsData, HttpHeaders headers) {
+            return new ResponseEntity<>(rsData, headers, rsData.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
         }
     }
 }
