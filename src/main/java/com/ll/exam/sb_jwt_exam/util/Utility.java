@@ -22,6 +22,26 @@ public class Utility {
         return (ObjectMapper) AppConfig.getContext().getBean("objectMapper");
     }
 
+    /* Map의 put() 기능을 한 큐에 */
+    public static <K, V> Map<K, V> mapOf(Object... args) { // Object ... agrgs -> 가변인자
+        Map<K, V> map = new LinkedHashMap<>();
+
+        int size = args.length / 2;
+
+        for (int i = 0; i < size; i++) {
+            int keyIndex = i * 2;
+            int valueIndex = keyIndex + 1;
+
+            K key = (K) args[keyIndex];
+            V value = (V) args[valueIndex];
+
+            map.put(key, value);
+        }
+
+        return map;
+    }
+
+
     public static class json {
 
         /* Map -> JSON String으로 변환 */
