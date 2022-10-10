@@ -43,8 +43,7 @@ public class MemberController {
         }
 
         // Authentication 헤더 추가
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authentication", "JWT_Access_Token");
+        HttpHeaders headers = Utility.spring.httpHeadersOf("Authentication", "JWT_Access_Token");
 
         // response body 보여주지 않고 null 처리
         return Utility.spring.responseEntityOf(RsData.of("S-1", "로그인 성공, Access Token을 발급합니다."), headers);

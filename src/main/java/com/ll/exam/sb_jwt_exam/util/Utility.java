@@ -76,6 +76,19 @@ public class Utility {
         public static <T> ResponseEntity<RsData> responseEntityOf(RsData<T> rsData, HttpHeaders headers) {
             return new ResponseEntity<>(rsData, headers, rsData.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
         }
+
+        public static HttpHeaders httpHeadersOf(String... args) {
+            HttpHeaders headers = new HttpHeaders();
+
+            Map<String, String> map = Utility.mapOf(args);
+
+            for (String key : map.keySet()) {
+                String value = map.get(key);
+                headers.set(key, value);
+            }
+
+            return headers;
+        }
     }
 }
 
