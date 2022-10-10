@@ -13,8 +13,16 @@ public class RsData<T> {
     private String msg;
     private T data;
 
+    /* data가 있을 때 응답 body */
+    public static <T> RsData<T> of(String resultCode, String msg, T data) {
+        return new RsData<>(resultCode, msg, data);
+    }
+
+    /* data가 없을 때 응답 body */
     public static <T> RsData<T> of(String resultCode, String msg) {
-        return new RsData<>(resultCode, msg, null);
+        // retrun new RsData<>(resultCode, msg, null)로 해도 상관 없음
+        // 다만 Of를 사용하면 전처리(종합해서 값을 채워넣는 등)하기 용턴
+        return of(resultCode, msg, null);
     }
 
     public boolean isSuccess() {

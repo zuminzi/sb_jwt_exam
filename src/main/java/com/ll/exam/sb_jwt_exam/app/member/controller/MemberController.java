@@ -42,11 +42,19 @@ public class MemberController {
             return Utility.spring.responseEntityOf(RsData.of("F-3", "비밀번호가 일치하지 않습니다."));
         }
 
+        String accessToken = "JWT_Access_Token";
+
         // Authentication 헤더 추가
         HttpHeaders headers = Utility.spring.httpHeadersOf("Authentication", "JWT_Access_Token");
 
-        // response body 보여주지 않고 null 처리
-        return Utility.spring.responseEntityOf(RsData.of("S-1", "로그인 성공, Access Token을 발급합니다."), headers);
+        // response body와 헤더 채워서 리턴
+        return Utility.spring.responseEntityOf(RsData.of(
+                "S-1",
+                "로그인 성공, Access Token을 발급합니다.",
+                Utility.mapOf(
+                        "accessToken", accessToken
+                )
+        ), headers);
     }
 
     @Data
