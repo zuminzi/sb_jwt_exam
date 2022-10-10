@@ -6,6 +6,7 @@ import com.ll.exam.sb_jwt_exam.app.member.service.MemberService;
 import com.ll.exam.sb_jwt_exam.util.Utility;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
+@Slf4j
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
@@ -42,7 +44,10 @@ public class MemberController {
             return Utility.spring.responseEntityOf(RsData.of("F-3", "비밀번호가 일치하지 않습니다."));
         }
 
-        String accessToken = "JWT_Access_Token";
+        // token 가져오기
+        log.debug("Util.json.toStr(member.getAccessTokenClaims()) : " + Utility.json.toStr(member.getAccessTokenClaims()));
+
+        String accessToken = memberService.genAccessToken(member);
 
         // Authentication 헤더 추가
         HttpHeaders headers = Utility.spring.httpHeadersOf("Authentication", "JWT_Access_Token");
