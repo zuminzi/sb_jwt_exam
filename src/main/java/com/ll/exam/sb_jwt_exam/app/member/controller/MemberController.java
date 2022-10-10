@@ -3,6 +3,7 @@ package com.ll.exam.sb_jwt_exam.app.member.controller;
 import com.ll.exam.sb_jwt_exam.app.base.RsData;
 import com.ll.exam.sb_jwt_exam.app.member.entity.Member;
 import com.ll.exam.sb_jwt_exam.app.member.service.MemberService;
+import com.ll.exam.sb_jwt_exam.app.security.entity.MemberContext;
 import com.ll.exam.sb_jwt_exam.util.Utility;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -10,11 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,6 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
+
+    @GetMapping("/test")
+    public String test(@AuthenticationPrincipal MemberContext memberContext) {
+        // @AuthenticationPrincipal은 세션기반 스프링시큐리티 로그인일 때 자동생성 되므로
+        // JWT 로그인에서는 따로 작업 안해줄 시 null로 리턴 (로그인이 완료처리된 상태라도)
+        // 즉, 세션 저장 작업 별도로 필요
+        return "안녕" + memberContext;
+    }
 
     @PostMapping("/login")
     // JSON 객체 받는 클래스 따로 생성 필요
@@ -45,7 +52,7 @@ public class MemberController {
         }
 
         // token 가져오기
-        log.debug("Util.json.toStr(member.getAccessTokenClaims()) : " + Utility.json.toStr(member.getAccessTokenClaims()));
+        //log.debug("Util.json.toStr(member.getAccessTokenClaims()) : " + Utility.json.toStr(member.getAccessTokenClaims()));
 
         String accessToken = memberService.genAccessToken(member);
 
