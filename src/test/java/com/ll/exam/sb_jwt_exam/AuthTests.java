@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //  간단하게 테스트하기 위해서는 @AutoConfigureMockMvc 대신 @WebMvcTest 사용
 // 단, @ WebMvcTest는 @SpringBootTest와 같이 사용은 불가
 // 각자 서로의 MockMvc를 모킹하기 때문에 충돌 발생하기 때문
+@SuppressWarnings("unchecked")
 @AutoConfigureMockMvc
 @Transactional
 @ActiveProfiles("test")
@@ -197,7 +198,12 @@ class AuthTests {
         resultActions = mvc
                 .perform(
                         get("/member/me")
-                                .header("Authorization", "Bearer " + accessToken)
+                                .header("Authorization", "Bearer " + accessToken) // value: Bearer + 한 칸 공백 + accessToken
+                        /*
+                        bearer token은 (Security Header에 담아지는)token 포맷의 일종
+                        API에 access하려면 accessToken을 사용해야 하는데, accessToken 액세스 토큰의 유효시간이 다 되면 bearerToken을 사용하여 새 액세스 토큰을 얻는다
+                        즉 accessToken을 받으려면 인증 서버에 이 bearerToken을 클라이언트 ID와 함께 보내면 된다
+                         */
                 )
                 .andDo(print());
 
