@@ -1,6 +1,7 @@
 package com.ll.exam.sb_jwt_exam.app.member.controller;
 
 import com.ll.exam.sb_jwt_exam.app.base.RsData;
+import com.ll.exam.sb_jwt_exam.app.member.dto.request.LoginDto;
 import com.ll.exam.sb_jwt_exam.app.member.entity.Member;
 import com.ll.exam.sb_jwt_exam.app.member.service.MemberService;
 import com.ll.exam.sb_jwt_exam.app.security.entity.MemberContext;
@@ -29,6 +30,16 @@ public class MemberController {
         // JWT 로그인에서는 따로 작업 안해줄 시 null로 리턴 (로그인이 완료처리된 상태라도)
         // 즉, 세션 저장 작업 별도로 필요
         return "안녕" + memberContext;
+    }
+
+
+    @GetMapping("/me")
+    public ResponseEntity<RsData> me(@AuthenticationPrincipal MemberContext memberContext) {
+        if (memberContext == null) { // 임시코드, 나중에는 시프링 시큐리티를 이용해서 로그인을 안했다면, 아예 여기로 못 들어오도록
+            return Utility.spring.responseEntityOf(RsData.failOf(null));
+        }
+
+        return Utility.spring.responseEntityOf(RsData.successOf(memberContext));
     }
 
     @PostMapping("/login")
@@ -67,15 +78,5 @@ public class MemberController {
                         "accessToken", accessToken
                 )
         ), headers);
-    }
-
-    @Data
-    public static class LoginDto {
-        private String username;
-        private String password;
-
-        public boolean isNotValid() {
-            return username == null || password == null || username.trim().length() == 0 || password.trim().length() == 0;
-        }
     }
 }
