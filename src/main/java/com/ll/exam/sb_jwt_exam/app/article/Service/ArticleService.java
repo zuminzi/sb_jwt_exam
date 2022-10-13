@@ -1,5 +1,6 @@
 package com.ll.exam.sb_jwt_exam.app.article.Service;
 
+import com.ll.exam.sb_jwt_exam.app.article.dto.ArticleModifyDto;
 import com.ll.exam.sb_jwt_exam.app.article.entity.Article;
 import com.ll.exam.sb_jwt_exam.app.article.repository.ArticleRepository;
 import com.ll.exam.sb_jwt_exam.app.member.entity.Member;
@@ -42,5 +43,16 @@ public class ArticleService {
 
     public boolean actorCanDelete(MemberContext memberContext, Article article) {
         return memberContext.getId() == article.getAuthor().getId();
+    }
+
+    public void modify(Article article, ArticleModifyDto articleModifyDto) {
+        article.setSubject(articleModifyDto.getSubject());
+        article.setContent(articleModifyDto.getContent());
+        articleRepository.save(article);
+    }
+
+    public boolean actorCanModify(MemberContext memberContext, Article article) {
+        // 일단 임의로, 삭제가 가능하면 수정도 가능하도록
+        return actorCanDelete(memberContext, article);
     }
 }
