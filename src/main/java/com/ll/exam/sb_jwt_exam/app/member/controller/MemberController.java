@@ -14,6 +14,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @RestController
 @Slf4j
@@ -43,13 +45,8 @@ public class MemberController {
     @PostMapping("/login")
     // JSON 객체 받는 클래스 따로 생성 필요
     // Member 클래스의 username, password로 바로 받으면 제대로 안받아와짐
-    public ResponseEntity<RsData> login(@RequestBody LoginDto loginDto) {
-        // null 체크
-        if (loginDto.isNotValid()) {
-            return Utility.spring.responseEntityOf(RsData.of("F-1", "로그인 정보가 올바르지 않습니다."));
-        }
+    public ResponseEntity<RsData> login(@Valid @RequestBody LoginDto loginDto) {
 
-        // 올바른 username과 password인지 체크
         Member member = memberService.findByUsername(loginDto.getUsername()).orElse(null);
 
         if (member == null) {
