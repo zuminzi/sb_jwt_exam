@@ -6,11 +6,9 @@ import com.ll.exam.sb_jwt_exam.app.member.entity.Member;
 import com.ll.exam.sb_jwt_exam.app.member.service.MemberService;
 import com.ll.exam.sb_jwt_exam.app.security.entity.MemberContext;
 import com.ll.exam.sb_jwt_exam.util.Utility;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,7 +66,7 @@ public class MemberController {
         String accessToken = memberService.genAccessToken(member);
 
         // Authentication 헤더 추가
-        HttpHeaders headers = Utility.spring.httpHeadersOf("Authentication", "JWT_Access_Token");
+        HttpHeaders headers = Utility.spring.httpHeadersOf("Authentication", accessToken);
 
         // response body와 헤더 채워서 리턴
         return Utility.spring.responseEntityOf(RsData.of(

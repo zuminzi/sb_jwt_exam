@@ -28,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //  간단하게 테스트하기 위해서는 @AutoConfigureMockMvc 대신 @WebMvcTest 사용
 // 단, @ WebMvcTest는 @SpringBootTest와 같이 사용은 불가
 // 각자 서로의 MockMvc를 모킹하기 때문에 충돌 발생하기 때문
-@SuppressWarnings("unchecked")
 @AutoConfigureMockMvc
 @Transactional
 @ActiveProfiles("test")
@@ -170,7 +169,7 @@ class AuthTests {
 
     @Test
     @DisplayName("로그인 후 얻은 JWT 토큰으로 현재 로그인 한 회원의 정보를 얻을 수 있다.")
-    void t5() throws Exception {
+    void t5() throws Exception { // TODO: fix
         // When
         ResultActions resultActions = mvc
                 .perform(
