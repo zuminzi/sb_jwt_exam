@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -169,7 +170,7 @@ class AuthTests {
 
     @Test
     @DisplayName("로그인 후 얻은 JWT 토큰으로 현재 로그인 한 회원의 정보를 얻을 수 있다.")
-    void t5() throws Exception { // TODO: fix
+    void t5() throws Exception {
         // When
         ResultActions resultActions = mvc
                 .perform(
@@ -207,8 +208,20 @@ class AuthTests {
                 .andDo(print());
 
         // Then
+        // TestInitData 기준으로 비교
         resultActions
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.resultCode").value("S-1"))
+                .andExpect(jsonPath("$.msg").value("성공"))
+                .andExpect(jsonPath("$.data.id").value(1))
+                .andExpect(jsonPath("$.data.createDate").isNotEmpty())
+                .andExpect(jsonPath("$.data.modifyDate").isNotEmpty())
+                .andExpect(jsonPath("$.data.username").value("user1"))
+                .andExpect(jsonPath("$.data.email").value("user1@test.com"))
+                .andExpect(jsonPath("$.data.authorities").isNotEmpty())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.fail").value(false));
 
         // MemberController me 메서드에서는 @AuthenticationPrincipal MemberContext memberContext 를 사용해서 현재 로그인 한 회원의 정보를 얻어야 한다.
 
